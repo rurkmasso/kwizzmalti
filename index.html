@@ -978,8 +978,8 @@
             HOW MANY WORDS WOULD YOU LIKE TO GUESS?
           </div>
           <div class="limit-wrap">
-            <input id="intro-limit" type="number" min="1" value="30" style="width:min(220px,80vw); text-align:center; background:#fff0f7; border:2px solid #ff9cc2; border-radius:18px; padding:12px 64px 12px 14px; font-size:20px; box-shadow:0 6px 16px rgba(255,111,177,0.2);" />
-            <span class="limit-max">Max: <span id="intro-limit-max">0</span></span>
+            <input id="intro-limit" type="number" min="10" value="30" style="width:min(240px,86vw); text-align:center; background:#fff0f7; border:2px solid #ff9cc2; border-radius:18px; padding:12px 92px 12px 14px; font-size:20px; box-shadow:0 6px 16px rgba(255,111,177,0.2);" />
+            <span class="limit-max">10–<span id="intro-limit-max">106</span></span>
           </div>
           <div class="meta" style="font-size:24px; font-weight:900; color:#8e1f5a;">Play Mode</div>
           <div class="controls" style="gap:10px; flex-wrap:wrap;">
@@ -1455,8 +1455,8 @@
     let used = new Set();
 
     function setupPools(limit) {
-      const max = items.length;
-      gameLimit = Math.max(1, Math.min(limit || max, max));
+      const max = 106;
+      gameLimit = Math.max(10, Math.min(limit || max, max));
       available = Array.from({ length: gameLimit }, (_, i) => i);
       used = new Set();
       hardIndices = items
@@ -1590,7 +1590,7 @@
         introModeInputs.forEach((r) => {
           if (r.checked) playMode = r.value;
         });
-        const limitVal = introLimitInput ? parseInt(introLimitInput.value, 10) : items.length;
+        const limitVal = introLimitInput ? parseInt(introLimitInput.value, 10) : 106;
         setupPools(limitVal);
         updateRules();
         updateNextEnabled();
@@ -1669,9 +1669,12 @@
     }
 
 
-    if (introLimitMax) introLimitMax.textContent = items.length;
-    if (introLimitInput) introLimitInput.setAttribute('max', String(items.length));
-    setupPools(items.length);
+    if (introLimitMax) introLimitMax.textContent = '106';
+    if (introLimitInput) {
+      introLimitInput.setAttribute('min', '10');
+      introLimitInput.setAttribute('max', '106');
+    }
+    setupPools(106);
     render();
     updateCounters();
     try {
