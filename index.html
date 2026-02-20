@@ -419,6 +419,24 @@
       width: 16px;
       height: 16px;
     }
+    .limit-wrap {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+    }
+    .limit-max {
+      position: absolute;
+      right: 14px;
+      font-family: "Avenir Next", "Helvetica", sans-serif;
+      font-size: 14px;
+      font-weight: 800;
+      color: #8e1f5a;
+      background: #fff0f7;
+      padding: 2px 8px;
+      border-radius: 999px;
+      border: 1px solid #ffd0e8;
+      pointer-events: none;
+    }
     .preview-quiz {
       background: linear-gradient(135deg, #ffe0ef, #fff6fb);
       border: 1px dashed #ff9cc2;
@@ -956,18 +974,20 @@
         <div class="intro-content" id="intro-content">
           <div class="title-text">KWIZZ MALTI</div>
         <div class="tagline-text">Tgħidx li taf kollox — PROVE IT!</div>
-          <div class="meta" style="font-size:18px;">
-            How many words would you like to guess?<br>
-            Max: <span id="intro-limit-max">0</span>
+          <div class="meta" style="font-size:22px; font-weight:900; text-transform:uppercase; color:#8e1f5a;">
+            HOW MANY WORDS WOULD YOU LIKE TO GUESS?
           </div>
-          <input id="intro-limit" type="number" min="1" value="30" style="width:min(220px,80vw); text-align:center; background:#fff0f7; border:2px solid #ff9cc2; border-radius:18px; padding:12px 14px; font-size:20px; box-shadow:0 6px 16px rgba(255,111,177,0.2);" />
+          <div class="limit-wrap">
+            <input id="intro-limit" type="number" min="1" value="30" style="width:min(220px,80vw); text-align:center; background:#fff0f7; border:2px solid #ff9cc2; border-radius:18px; padding:12px 64px 12px 14px; font-size:20px; box-shadow:0 6px 16px rgba(255,111,177,0.2);" />
+            <span class="limit-max">Max: <span id="intro-limit-max">0</span></span>
+          </div>
           <div class="meta" style="font-size:24px; font-weight:900; color:#8e1f5a;">Play Mode</div>
           <div class="controls" style="gap:10px; flex-wrap:wrap;">
             <label class="mode-choice">
               <input type="radio" name="intro-mode" value="single" checked style="margin-right:6px;"> Single Player
             </label>
             <label class="mode-choice">
-              <input type="radio" name="intro-mode" value="versus" style="margin-right:6px;"> Versus (Players)
+              <input type="radio" name="intro-mode" value="versus" style="margin-right:6px;"> Multiplayer
             </label>
           </div>
           <button class="modal-close" id="start-game-btn">Ibda</button>
