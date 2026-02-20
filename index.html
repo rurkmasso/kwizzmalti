@@ -420,15 +420,11 @@
       height: 16px;
     }
     .limit-wrap {
-      position: relative;
       display: inline-flex;
       align-items: center;
+      gap: 10px;
     }
     .limit-max {
-      position: absolute;
-      right: 14px;
-      top: 50%;
-      transform: translateY(-50%);
       font-family: "Avenir Next", "Helvetica", sans-serif;
       font-size: 14px;
       font-weight: 800;
@@ -439,7 +435,6 @@
       border: 1px solid #ffd0e8;
       pointer-events: none;
       opacity: 0.9;
-      z-index: 2;
     }
     .limit-error {
       display: none;
@@ -993,7 +988,7 @@
             HOW MANY WORDS WOULD YOU LIKE TO GUESS?
           </div>
           <div class="limit-wrap">
-            <input id="intro-limit" type="number" min="10" max="106" value="30" style="width:min(260px,88vw); text-align:center; background:#fff0f7; border:2px solid #ff9cc2; border-radius:18px; padding:12px 110px 12px 14px; font-size:20px; box-shadow:0 6px 16px rgba(255,111,177,0.2);" />
+            <input id="intro-limit" type="number" min="10" max="106" value="30" style="width:min(220px,80vw); text-align:center; background:#fff0f7; border:2px solid #ff9cc2; border-radius:18px; padding:12px 14px; font-size:20px; box-shadow:0 6px 16px rgba(255,111,177,0.2);" />
             <span class="limit-max">MIN 10 · MAX <span id="intro-limit-max">106</span></span>
           </div>
           <div class="limit-error" id="limit-error">Pick a number between 10 and 106 so the game can start.</div>
