@@ -1,0 +1,2257 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Maltese Old Sayings Quiz</title>
+  <style>
+    :root {
+      --bg1: #ffe3ef;
+      --bg2: #fff6fb;
+      --bg3: #f3f0ff;
+      --card: #fff;
+      --ink: #3a2b3f;
+      --accent: #ff5fa2;
+      --accent2: #ffd166;
+      --accent3: #7bdff2;
+      --shadow: 0 18px 45px rgba(58,43,63,0.18);
+      --border: #ffd0e8;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Playfair Display", "Didot", "Georgia", serif;
+      color: var(--ink);
+      background:
+        radial-gradient(900px 500px at 10% 10%, #ffffffcc, transparent),
+        radial-gradient(700px 450px at 85% 20%, #fff0f7, transparent),
+        radial-gradient(800px 500px at 80% 80%, #f1f7ff, transparent),
+        linear-gradient(135deg, var(--bg1), var(--bg2) 45%, var(--bg3));
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      overflow: hidden;
+    }
+    .wrap {
+      width: min(1400px, 96vw);
+      background: var(--card);
+      border-radius: 28px;
+      box-shadow: var(--shadow);
+      padding: 32px;
+      border: 2px solid var(--border);
+      position: relative;
+      overflow: hidden;
+      z-index: 2;
+      pointer-events: auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .step {
+      text-align: center;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 60vh;
+    }
+    .play-layout {
+      width: 100%;
+      display: grid;
+      grid-template-columns: 320px 1fr;
+      gap: 20px;
+      align-items: start;
+    }
+    .left-rail {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    button, input {
+      position: relative;
+      z-index: 6;
+      pointer-events: auto;
+    }
+    .wrap::before,
+    .wrap::after {
+      content: "";
+      position: absolute;
+      border-radius: 50%;
+      opacity: 0.25;
+      z-index: 0;
+      pointer-events: none;
+    }
+    .wrap::before {
+      width: 220px;
+      height: 220px;
+      background: #ffd6e8;
+      top: -80px;
+      left: -60px;
+    }
+    .wrap::after {
+      width: 260px;
+      height: 260px;
+      background: #e6f7ff;
+      bottom: -120px;
+      right: -80px;
+    }
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      margin-bottom: 16px;
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      width: 100%;
+    }
+    header > div {
+      width: 100%;
+      text-align: center;
+    }
+    .hud {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin: 6px 0 14px 0;
+      font-family: "Avenir Next", "Helvetica", sans-serif;
+      color: #8e1f5a;
+    }
+    .hud-pill {
+      background: #fff0f7;
+      border: 1px solid #ffd0e8;
+      border-radius: 999px;
+      padding: 6px 12px;
+      font-size: 13px;
+      letter-spacing: 0.02em;
+    }
+    .hearts {
+      letter-spacing: 4px;
+      color: #ff5fa2;
+      text-shadow: 0 2px 6px rgba(255,95,162,0.35);
+    }
+    .title-text {
+      font-family: "Avenir Next", "Helvetica", sans-serif;
+      font-size: 86px;
+      margin: 0;
+      color: #8e1f5a;
+      letter-spacing: 1px;
+      font-style: normal;
+      font-weight: 900;
+      text-transform: uppercase;
+    }
+    .tagline-text {
+      margin: 0;
+      font-size: 30px;
+      color: #6b4a6b;
+      text-align: center;
+      font-weight: 700;
+    }
+    .card {
+      background: #fff;
+      border-radius: 20px;
+      padding: 44px;
+      box-shadow: 0 12px 30px rgba(58,43,63,0.12);
+      border: 1px solid #ffe0ec;
+      position: relative;
+      z-index: 1;
+      pointer-events: auto;
+      text-align: center;
+    }
+    .main-block {
+      min-height: 600px;
+    }
+    #leaderboard-card {
+      z-index: 4;
+    }
+    .modes {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      margin-bottom: 14px;
+      flex-wrap: wrap;
+      position: relative;
+      z-index: 4;
+      pointer-events: auto;
+    }
+    .mode-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(180px, 1fr));
+      gap: 16px;
+      margin: 10px auto 6px auto;
+      width: min(900px, 95vw);
+    }
+    .mode-card {
+      background: #fff6fb;
+      border: 2px solid #ffd0e8;
+      border-radius: 18px;
+      padding: 14px;
+      text-align: center;
+      cursor: pointer;
+      box-shadow: 0 10px 20px rgba(255,111,177,0.15);
+      transition: transform 120ms ease, box-shadow 120ms ease, border-color 120ms ease;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .mode-card:hover { transform: translateY(-2px); }
+    .mode-card.selected {
+      border-color: #ff6fb1;
+      box-shadow: 0 14px 26px rgba(255,111,177,0.28);
+    }
+    .turn-banner {
+      background: #ff6fb1;
+      color: white;
+      font-weight: 800;
+      border-radius: 999px;
+      padding: 8px 18px;
+      font-size: 18px;
+      letter-spacing: 0.03em;
+      display: inline-block;
+      margin: 6px auto 10px auto;
+      box-shadow: 0 8px 18px rgba(255,111,177,0.3);
+    }
+    .btn-blocked {
+      opacity: 0.6;
+    }
+    button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+    .mode-preview {
+      height: 120px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: "Avenir Next", "Helvetica", sans-serif;
+      font-size: 18px;
+      color: #8e1f5a;
+    }
+    .mode-title {
+      font-family: "Avenir Next", "Helvetica", sans-serif;
+      font-size: 18px;
+      font-weight: 800;
+      color: #8e1f5a;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      justify-content: center;
+    }
+    .info-icon {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: #ff9cc2;
+      color: white;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 800;
+      cursor: help;
+    }
+    .info-icon[data-tip] {
+      position: relative;
+    }
+    .info-icon[data-tip]:hover::after {
+      content: attr(data-tip);
+      position: absolute;
+      bottom: 130%;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #fff;
+      color: #6b4a6b;
+      border: 1px solid #ffd0e8;
+      border-radius: 8px;
+      padding: 6px 8px;
+      white-space: nowrap;
+      font-size: 12px;
+      box-shadow: 0 8px 18px rgba(58,43,63,0.18);
+      z-index: 5;
+    }
+    .info-modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(58,43,63,0.35);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 12;
+      padding: 20px;
+    }
+    .info-modal.show {
+      display: flex;
+    }
+    .round-badge {
+      background: #ff6fb1;
+      color: white;
+      font-weight: 800;
+      border-radius: 999px;
+      padding: 6px 14px;
+      font-size: 16px;
+      letter-spacing: 0.04em;
+      display: inline-block;
+      margin-bottom: 10px;
+    }
+    .info-card {
+      background: #fff;
+      border: 2px solid #ffd0e8;
+      border-radius: 20px;
+      padding: 32px;
+      width: min(900px, 96vw);
+      box-shadow: 0 20px 50px rgba(58,43,63,0.25);
+      text-align: center;
+    }
+    .info-graphic {
+      height: 220px;
+      border-radius: 16px;
+      background: linear-gradient(135deg, #ffe0ef, #fff6fb);
+      border: 1px solid #ff9cc2;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 14px 0;
+      overflow: hidden;
+    }
+    .info-clone {
+      transform: scale(0.7);
+      transform-origin: center;
+      pointer-events: none;
+    }
+    .info-list {
+      text-align: left;
+      margin: 12px auto 0 auto;
+      width: min(700px, 90vw);
+      font-family: "Avenir Next", "Helvetica", sans-serif;
+      color: #6b4a6b;
+      font-size: 16px;
+      line-height: 1.6;
+    }
+    .raffle-list {
+      display: grid;
+      gap: 10px;
+      margin-top: 14px;
+    }
+    .raffle-item {
+      background: #fff6fb;
+      border: 2px solid #ffd0e8;
+      border-radius: 14px;
+      padding: 14px 18px;
+      font-family: "Avenir Next", "Helvetica", sans-serif;
+      font-size: 20px;
+      color: #8e1f5a;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      box-shadow: 0 8px 16px rgba(255,111,177,0.15);
+    }
+    .raffle-rank {
+      background: #ff6fb1;
+      color: white;
+      font-weight: 800;
+      border-radius: 999px;
+      padding: 6px 12px;
+      font-size: 16px;
+      letter-spacing: 0.04em;
+    }
+    .info-list b { color: #8e1f5a; }
+    .btn-pill {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 999px;
+      background: #ff6fb1;
+      color: white;
+      font-weight: 800;
+      font-size: 12px;
+      letter-spacing: 0.02em;
+      margin: 0 2px;
+    }
+    .score-btn {
+      padding: 10px 18px;
+      font-size: 16px;
+      border-radius: 999px;
+      border: 2px solid transparent;
+      box-shadow: 0 8px 18px rgba(255,111,177,0.25);
+      cursor: pointer;
+      background: linear-gradient(135deg, #ff7ab7, #ffc2de);
+      color: #5a1d3a;
+      font-weight: 900;
+      letter-spacing: 0.06em;
+    }
+    .score-btn.yes {
+      background: linear-gradient(135deg, #7df7c0, #b7ffd9);
+      color: #165a3a;
+      border-color: #7df7c0;
+    }
+    .score-btn.no {
+      background: linear-gradient(135deg, #ff8aa8, #ffd1de);
+      color: #6b1f3b;
+      border-color: #ff8aa8;
+    }
+    .score-actions {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .mode-choice {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 16px;
+      border-radius: 999px;
+      border: 2px solid #ffd0e8;
+      background: #fff0f7;
+      color: #8e1f5a;
+      font-weight: 800;
+      box-shadow: 0 6px 14px rgba(255,111,177,0.18);
+      cursor: pointer;
+    }
+    .mode-choice input {
+      accent-color: #ff6fb1;
+      width: 16px;
+      height: 16px;
+    }
+    .preview-quiz {
+      background: linear-gradient(135deg, #ffe0ef, #fff6fb);
+      border: 1px dashed #ff9cc2;
+    }
+    .preview-slot {
+      background: linear-gradient(135deg, #fff0f7, #ffd6e8);
+      border: 1px solid #ff9cc2;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 6px;
+      padding: 10px;
+    }
+    .preview-slot span {
+      background: #fff;
+      border-radius: 8px;
+      border: 1px solid #ffd0e8;
+      height: 22px;
+    }
+    .preview-roulette {
+      background: conic-gradient(#ffd6e8 0deg 120deg, #e6f7ff 120deg 240deg, #fff6d5 240deg 360deg);
+      border: 1px solid #ffd0e8;
+      border-radius: 50%;
+      width: 120px;
+      height: 120px;
+      margin: 0 auto;
+    }
+    .mode-btn {
+      background: #fff0f7;
+      color: #b02a6f;
+      border: 1px solid #ffd0e8;
+      padding: 8px 14px;
+      border-radius: 999px;
+      font-family: "Avenir Next", "Helvetica", sans-serif;
+      font-size: 14px;
+      cursor: pointer;
+      pointer-events: auto;
+    }
+    .mode-btn.disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      filter: grayscale(0.2);
+    }
+    .mode-btn.active {
+      background: #ff6fb1;
+      color: white;
+      border-color: #ff6fb1;
+    }
+    .badge {
+      display: inline-block;
+      background: #fff0f7;
+      color: #b02a6f;
+      border: 1px solid #ffd0e8;
+      padding: 6px 12px;
+      border-radius: 999px;
+      font-family: "Avenir Next", "Helvetica", sans-serif;
+      font-size: 16px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin: 0 auto;
+    }
+    .word {
+      font-family: "Avenir Next", "Helvetica", sans-serif;
+      font-size: 64px;
+      color: #8e1f5a;
+      margin: 16px 0 8px 0;
+      text-align: center;
+      text-shadow: 0 2px 0 #ffd6e8, 0 8px 24px rgba(176,42,111,0.2);
+      background: #fff4fa;
+      border: 1px solid #ffd6e8;
+      padding: 10px 16px;
+      border-radius: 16px;
+      font-style: normal;
+      font-weight: 900;
+    }
+    .meaning {
+      font-family: "Avenir Next", "Helvetica", sans-serif;
+      font-size: 30px;
+      color: #2f2236;
+      text-align: center;
+      margin: 12px 0 0 0;
+      display: none;
+      background: #fff9fd;
+      border: 1px solid #f2d1e1;
+      padding: 10px 14px;
+      border-radius: 14px;
+      box-shadow: 0 8px 20px rgba(58,43,63,0.08);
+      font-style: normal;
+      font-weight: 800;
+    }
+    .meaning.revealed {
+      display: inline-block;
+      animation: reveal 420ms ease-out;
+    }
+    @keyframes reveal {
+      from { transform: translateY(8px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+    /* dash removed */
+    .sparkles {
+      text-align: center;
+      color: #ffb3c7;
+      font-size: 22px;
+      margin: 6px 0 0 0;
+      letter-spacing: 6px;
+    }
+    .flower {
+      position: fixed;
+      top: -60px;
+      color: #ff7aa2;
+      opacity: 0.65;
+      font-size: 22px;
+      z-index: 3;
+      pointer-events: none;
+      animation: fall linear forwards;
+      text-shadow: 0 2px 6px rgba(255,122,162,0.4);
+      will-change: transform, opacity;
+    }
+    .glitter {
+      position: fixed;
+      top: -20px;
+      color: #ffd166;
+      opacity: 0.6;
+      font-size: 12px;
+      z-index: 3;
+      pointer-events: none;
+      animation: fall linear forwards;
+      text-shadow: 0 2px 8px rgba(255,209,102,0.5);
+      will-change: transform, opacity;
+    }
+    .heart {
+      position: fixed;
+      top: -20px;
+      color: #ff5fa2;
+      opacity: 0.7;
+      font-size: 16px;
+      z-index: 3;
+      pointer-events: none;
+      animation: fall linear forwards;
+      text-shadow: 0 2px 8px rgba(255,95,162,0.45);
+      will-change: transform, opacity;
+    }
+    @keyframes fall {
+      to {
+        transform: translateY(110vh) rotate(360deg);
+        opacity: 0.2;
+      }
+    }
+    #fx-layer {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 1;
+    }
+    .burst {
+      position: fixed;
+      left: 50%;
+      top: 45%;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #ff7aa2;
+      pointer-events: none;
+      z-index: 5;
+      animation: burst 900ms ease-out forwards;
+    }
+    @keyframes burst {
+      to {
+        transform: translate(var(--dx), var(--dy)) scale(0.6);
+        opacity: 0;
+      }
+    }
+    .controls {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      align-items: center;
+      margin-top: 18px;
+      flex-wrap: wrap;
+      text-align: center;
+    }
+    .input-card {
+      background: #fff6fb;
+      border: 2px solid #ffd0e8;
+      border-radius: 18px;
+      padding: 16px;
+      box-shadow: 0 10px 20px rgba(255,111,177,0.18);
+    }
+    button {
+      background: linear-gradient(135deg, #ff6fb1, #ff9cc2);
+      color: white;
+      border: 0;
+      padding: 12px 20px;
+      border-radius: 999px;
+      font-size: 16px;
+      cursor: pointer;
+      box-shadow: 0 10px 20px rgba(255,111,177,0.35);
+      transition: transform 120ms ease, box-shadow 120ms ease;
+    }
+    button:hover { transform: translateY(-1px); }
+    button.secondary {
+      background: linear-gradient(135deg, #9ae6ff, #d1f7ff);
+      color: #18323a;
+      box-shadow: 0 10px 20px rgba(123,223,242,0.35);
+    }
+    .meta {
+      margin-top: 16px;
+      text-align: center;
+      font-family: "Avenir Next", "Helvetica", sans-serif;
+      color: #6b4a6b;
+      font-size: 18px;
+    }
+    .leaderboard {
+      margin-top: 10px;
+      display: grid;
+      gap: 8px;
+      background: #fff0f7;
+      border: 2px solid #ffd0e8;
+      border-radius: 16px;
+      padding: 10px;
+      box-shadow: 0 10px 20px rgba(255,111,177,0.2);
+      min-height: 40px;
+    }
+    .leaderboard-row.header {
+      background: #ffd6e8;
+      border-color: #ff9cc2;
+      font-weight: 800;
+      text-transform: uppercase;
+      font-size: 16px;
+      letter-spacing: 0.08em;
+    }
+    .leaderboard-row {
+      display: grid;
+      grid-template-columns: 1.6fr 0.6fr 0.6fr;
+      align-items: center;
+      gap: 16px;
+      background: #fff6fb;
+      border: 1px solid #ffd0e8;
+      border-radius: 12px;
+      padding: 8px 10px;
+      font-family: "Avenir Next", "Helvetica", sans-serif;
+      font-size: 16px;
+      color: #6b4a6b;
+      animation: rowIn 350ms ease-out;
+      text-align: left;
+      justify-items: start;
+    }
+    .leaderboard-row > div:nth-child(2) {
+      justify-self: center;
+      text-align: center;
+    }
+    .leaderboard-row > div:nth-child(3) {
+      justify-self: end;
+      text-align: right;
+    }
+    .remove-btn {
+      background: #ff6fb1;
+      border: 0;
+      color: white;
+      border-radius: 999px;
+      padding: 6px 10px;
+      font-size: 12px;
+      cursor: pointer;
+      box-shadow: none;
+    }
+    @keyframes rowIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .progress {
+      height: 8px;
+      background: #f2d7e6;
+      border-radius: 999px;
+      overflow: hidden;
+      margin-top: 12px;
+    }
+    .progress > div {
+      height: 100%;
+      background: linear-gradient(90deg, #ff7aa2, #ffc8dd);
+      width: 0%;
+      transition: width 300ms ease;
+    }
+    .wheel-wrap {
+      position: relative;
+      width: 320px;
+      height: 320px;
+      margin: 8px auto 12px auto;
+    }
+    .slot-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(100px, 1fr));
+      gap: 12px;
+      margin: 14px auto 8px auto;
+      width: min(660px, 92vw);
+    }
+    .slot-cell {
+      background: #fff4fa;
+      border: 1px solid #ffd6e8;
+      border-radius: 12px;
+      padding: 14px 10px;
+      text-align: center;
+      font-family: "Avenir Next", "Helvetica", sans-serif;
+      font-size: 16px;
+      font-weight: 700;
+      font-style: normal;
+      color: #6b4a6b;
+      min-height: 58px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .slot-cell.center {
+      background: #ffe0ef;
+      color: #8e1f5a;
+      font-weight: 600;
+      box-shadow: 0 6px 14px rgba(176,42,111,0.18);
+    }
+    .wheel {
+      width: 320px;
+      height: 320px;
+      border-radius: 50%;
+      background: conic-gradient(
+        #111 0 10deg,
+        #ff9cc2 10deg 25deg, #fff 25deg 40deg,
+        #ff9cc2 40deg 55deg, #fff 55deg 70deg,
+        #ff9cc2 70deg 85deg, #fff 85deg 100deg,
+        #ff9cc2 100deg 115deg, #fff 115deg 130deg,
+        #ff9cc2 130deg 145deg, #fff 145deg 160deg,
+        #ff9cc2 160deg 175deg, #fff 175deg 190deg,
+        #ff9cc2 190deg 205deg, #fff 205deg 220deg,
+        #ff9cc2 220deg 235deg, #fff 235deg 250deg,
+        #ff9cc2 250deg 265deg, #fff 265deg 280deg,
+        #ff9cc2 280deg 295deg, #fff 295deg 310deg,
+        #ff9cc2 310deg 325deg, #fff 325deg 340deg,
+        #ff9cc2 340deg 355deg, #111 355deg 360deg
+      );
+      border: 2px solid #ffd0e8;
+      box-shadow: 0 12px 26px rgba(58,43,63,0.18);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 18px;
+      transition: transform 120ms linear;
+      position: relative;
+    }
+    .wheel::after {
+      content: "";
+      position: absolute;
+      inset: 18%;
+      border-radius: 50%;
+      background: radial-gradient(circle at 30% 30%, #fff, #ffd6e8);
+      border: 2px solid #ff9cc2;
+      box-shadow: inset 0 0 0 6px #fff0f7;
+    }
+    .wheel-text {
+      display: none;
+    }
+    .pointer {
+      position: absolute;
+      top: -18px;
+      left: 50%;
+      transform: translateX(-50%);
+      color: #b02a6f;
+      font-size: 24px;
+      text-shadow: 0 2px 6px rgba(176,42,111,0.35);
+    }
+    .modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(58,43,63,0.35);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 10;
+      padding: 20px;
+    }
+    .modal.show {
+      display: flex;
+    }
+    .modal.hide {
+      animation: vanish 260ms ease-in forwards;
+    }
+    @keyframes vanish {
+      to { opacity: 0; }
+    }
+    .modal-card {
+      background: transparent;
+      border: 0;
+      border-radius: 0;
+      padding: 0;
+      width: 100vw;
+      height: 100vh;
+      text-align: center;
+      box-shadow: none;
+      animation: pop 220ms ease-out;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .answer-card {
+      background: #fff;
+      border-radius: 22px;
+      padding: 28px 30px 24px 30px;
+      max-width: 520px;
+      width: min(720px, calc(100% - 40px));
+      height: auto;
+      text-align: center;
+      border: 2px solid #ffd0e8;
+      box-shadow: 0 18px 40px rgba(255,111,177,0.25);
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .modal-word {
+      font-family: "Avenir Next", "Helvetica", sans-serif;
+      font-size: 36px;
+      font-weight: 900;
+      font-style: normal;
+      color: #8e1f5a;
+      margin-bottom: 0;
+      letter-spacing: 0.02em;
+      word-break: break-word;
+      white-space: normal;
+    }
+    .modal-meaning {
+      font-family: "Avenir Next", "Helvetica", sans-serif;
+      font-size: 24px;
+      margin-bottom: 0;
+      color: #5a3a5a;
+      font-weight: 800;
+      font-style: normal;
+      word-break: break-word;
+      white-space: normal;
+    }
+    .intro-modal {
+      position: fixed;
+      inset: 0;
+      z-index: 8;
+    }
+    .intro-active .wrap > :not(#intro-modal) {
+      visibility: hidden;
+    }
+    .in-play #player-form,
+    .in-play #to-step-2 {
+      display: none;
+    }
+    .in-play .remove-btn {
+      display: none;
+    }
+    .top-right {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      display: flex;
+      gap: 8px;
+      z-index: 6;
+    }
+    .icon-btn {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      border: 2px solid #ffd0e8;
+      background: #fff0f7;
+      color: #8e1f5a;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: 0 6px 16px rgba(255,111,177,0.2);
+    }
+    .intro-content {
+      background: transparent;
+      border: 0;
+      border-radius: 0;
+      padding: 0 24px;
+      width: 100vw;
+      height: 100vh;
+      box-shadow: none;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      align-items: center;
+      justify-content: center;
+    }
+    @keyframes pop {
+      from { transform: scale(0.95); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+    .twirl-in {
+      animation: twirlIn 520ms ease-out;
+      transform-origin: center;
+    }
+    @keyframes twirlIn {
+      from { transform: scale(0.4) rotate(-360deg); opacity: 0; }
+      to { transform: scale(1) rotate(0deg); opacity: 1; }
+    }
+    .modal-close {
+      margin-top: 14px;
+      background: #ff6fb1;
+      color: white;
+      border: 0;
+      padding: 28px 56px;
+      border-radius: 999px;
+      cursor: pointer;
+      font-size: 34px;
+      font-weight: 900;
+    }
+    .modal-close.small {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      margin: 0;
+      padding: 8px 12px;
+      font-size: 14px;
+      font-weight: 700;
+      box-shadow: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="top-right">
+      <button class="icon-btn" id="log-open" title="Activity Log">📝</button>
+    </div>
+    <div class="modal show intro-modal" id="intro-modal">
+      <div class="modal-card">
+        <div class="intro-content" id="intro-content">
+          <div class="title-text">KWIZZ MALTI</div>
+        <div class="tagline-text">Tgħidx li taf kollox — PROVE IT!</div>
+          <div class="meta" style="font-size:18px;">
+            How many words this game?<br>
+            Max: <span id="intro-limit-max">0</span>
+          </div>
+          <input id="intro-limit" type="number" min="1" value="30" style="width:min(220px,80vw); text-align:center; background:#fff0f7; border:2px solid #ff9cc2; border-radius:18px; padding:12px 14px; font-size:20px; box-shadow:0 6px 16px rgba(255,111,177,0.2);" />
+          <div class="meta" style="font-size:24px; font-weight:900; color:#8e1f5a;">Play Mode</div>
+          <div class="controls" style="gap:10px; flex-wrap:wrap;">
+            <label class="mode-choice">
+              <input type="radio" name="intro-mode" value="single" checked style="margin-right:6px;"> Single Player
+            </label>
+            <label class="mode-choice">
+              <input type="radio" name="intro-mode" value="versus" style="margin-right:6px;"> Versus (Players)
+            </label>
+          </div>
+          <button class="modal-close" id="start-game-btn">Ibda</button>
+        </div>
+      </div>
+    </div>
+    <header>
+      <div>
+        <h1 class="title-text">KWIZZ MALTI</h1>
+        <p class="tagline-text">Tgħidx li taf kollox — PROVE IT!</p>
+      </div>
+    </header>
+
+    <div class="step" id="step-1">
+      <div class="card main-block" id="leaderboard-card" style="margin-top:16px;">
+        <!-- Leaderboard label removed per request -->
+      <form class="controls input-card" id="player-form" style="margin-top:12px;">
+        <input id="player-name" type="text" placeholder="Isem" style="width:min(520px,90vw); text-align:center; background:#fff0f7; border:2px solid #ff9cc2; border-radius:18px; padding:16px 18px; font-size:22px; box-shadow:0 6px 16px rgba(255,111,177,0.2);" />
+        <button class="secondary" id="add-player" type="submit" style="font-size:18px; padding:14px 18px;">Żid Plejer</button>
+        <!-- Removed Start Game / Next Player per request -->
+      </form>
+      <div class="meta" id="game-status"></div>
+      <div class="leaderboard">
+        <div class="leaderboard-row header">
+          <div>Player</div>
+          <div>Points</div>
+          <div></div>
+        </div>
+        <div id="leaderboard"></div>
+      </div>
+        <div class="controls">
+          <button id="to-step-2" style="font-size:18px; padding:14px 18px;">Next: Choose Mode</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="step" id="step-2" style="display:none;">
+      <div class="card">
+        <div class="badge">Choose Mode</div>
+        <div class="mode-grid">
+          <div class="mode-card" data-mode="quiz">
+            <div class="mode-title">Quiz Mode <span class="info-icon" data-tip="Reveal the answer with a pop-up.">i</span></div>
+            <div class="mode-preview preview-quiz">Reveal Pop‑Up</div>
+            <div class="meta">Reveal the meaning only when they’ve guessed.</div>
+          </div>
+          <div class="mode-card" data-mode="slot">
+            <div class="mode-title">Slot Mode <span class="info-icon" data-tip="Spin, say STOP, then reveal.">i</span></div>
+            <div class="mode-preview preview-slot">
+              <span></span><span></span><span></span>
+              <span></span><span></span><span></span>
+              <span></span><span></span><span></span>
+            </div>
+            <div class="meta">Spin fast, shout STOP, lock the word.</div>
+          </div>
+          <div class="mode-card" data-mode="roulette">
+            <div class="mode-title">Roulette Mode <span class="info-icon" data-tip="Spin the wheel, say STOP, then reveal.">i</span></div>
+            <div class="mode-preview">
+              <div class="preview-roulette"></div>
+            </div>
+            <div class="meta">Spin the wheel, say STOP, lock the pick.</div>
+          </div>
+        </div>
+        <div class="controls">
+          <button class="secondary" id="back-to-1">Back</button>
+          <button id="to-step-3">Next: Raffle</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="step" id="step-3" style="display:none;">
+      <div class="card">
+        <div class="badge">Raffle Order</div>
+        <div class="word" id="raffle-current">Ready to pick the order</div>
+        <div class="meta" id="raffle-status">Press Raffle to randomize the player order.</div>
+        <div class="controls">
+          <button id="raffle-start">Raffle Order</button>
+          <button class="secondary" id="back-to-2b">Back</button>
+          <button id="to-step-4" disabled>Next: Rules</button>
+        </div>
+        <div class="raffle-list" id="raffle-list"></div>
+      </div>
+    </div>
+
+    <div class="step" id="step-4" style="display:none;">
+      <div class="card">
+        <div class="badge">Rules</div>
+        <div class="info-list" id="rules-list" style="text-align:left;"></div>
+        <div class="controls">
+          <button class="secondary" id="back-to-3">Back</button>
+          <button id="to-step-5">Start Playing</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="step" id="step-5" style="display:none;">
+      <div class="play-layout">
+        <div class="left-rail" id="leaderboard-rail"></div>
+        <div>
+    <div class="card" id="quiz-card">
+      <div class="badge">Girlie Quiz</div>
+      <div class="turn-banner" id="turn-label-quiz">Turn: —</div>
+      <div class="word" id="word">—</div>
+      <!-- dash removed -->
+      <div class="sparkles">✿ ✧ ✿ ✧ ✿</div>
+      <div class="meaning" id="meaning">—</div>
+      <div class="controls">
+        <button class="secondary" id="next">Next</button>
+        <button class="secondary" id="shuffle">Shuffle</button>
+      </div>
+      <div class="meta">
+        <span id="counter">0 / 0</span>
+        <div class="progress"><div id="bar"></div></div>
+      </div>
+      </div>
+
+    <div class="card" id="slot-card" style="display:none;">
+      <div class="badge">Malti Slot</div>
+      <div class="turn-banner" id="turn-label-slot">Turn: —</div>
+      <div class="meta"><span id="slot-counter">0 / 0</span></div>
+      <div class="word" id="slot-word">Press Spin</div>
+      <!-- dash removed -->
+      <div class="sparkles">✿ ✧ ✿ ✧ ✿</div>
+      <div class="meaning" id="slot-meaning">Meaning appears here</div>
+      <div class="slot-grid" id="slot-grid">
+        <div class="slot-cell">—</div><div class="slot-cell">—</div><div class="slot-cell">—</div>
+        <div class="slot-cell">—</div><div class="slot-cell center">—</div><div class="slot-cell">—</div>
+        <div class="slot-cell">—</div><div class="slot-cell">—</div><div class="slot-cell">—</div>
+      </div>
+      <div class="meta" id="slot-status">Ready.</div>
+      <div class="controls">
+        <button id="slot-spin">Spin</button>
+        <button class="secondary" id="slot-stop">Stop (or press Enter)</button>
+      </div>
+      <div class="meta">Say “STOP” or press Enter to lock the word.</div>
+      </div>
+
+    <div class="card" id="roulette-card" style="display:none;">
+      <div class="badge">Malti Roulette</div>
+      <div class="turn-banner" id="turn-label-roulette">Turn: —</div>
+      <div class="meta"><span id="roulette-counter">0 / 0</span></div>
+      <div class="word" id="roulette-word">Press Spin</div>
+      <div class="wheel-wrap">
+        <div class="pointer">▼</div>
+        <div class="wheel" id="wheel">
+          <div class="wheel-text" id="wheel-text">Press Spin</div>
+        </div>
+      </div>
+      <div class="meaning" id="roulette-meaning">Meaning appears here</div>
+      <div class="controls">
+        <button id="roulette-spin">Spin</button>
+        <button class="secondary" id="roulette-stop">Stop (or press Enter)</button>
+      </div>
+      <div class="meta">
+        Say “STOP” or press Enter to lock the word.
+      </div>
+      </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" id="answer-modal">
+    <div class="modal-card answer-card">
+      <div class="modal-word" id="modal-word">—</div>
+      <div class="modal-meaning" id="modal-meaning">—</div>
+      <div class="controls" id="modal-reveal-wrap">
+        <button id="modal-reveal">Reveal Answer</button>
+      </div>
+      <div class="controls" id="modal-score"></div>
+      <button class="modal-close small" id="modal-close">Close</button>
+    </div>
+  </div>
+
+  <div id="fx-layer"></div>
+
+  <div class="info-modal" id="info-modal">
+    <div class="info-card">
+      <div class="title-text" id="info-title">Mode</div>
+      <div class="info-graphic" id="info-graphic">✨</div>
+      <div class="tagline-text">How It Works</div>
+      <div class="info-list" id="info-list"></div>
+      <div class="controls">
+        <button class="secondary" id="info-close">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="info-modal" id="guard-modal">
+    <div class="info-card">
+      <div class="title-text">Fejn sejjer?</div>
+      <div class="tagline-text" id="guard-message">Trid tagħżel mill-inqas 2 plejers.</div>
+      <div class="controls">
+        <button class="secondary" id="guard-close">OK</button>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="info-modal" id="log-modal">
+    <div class="info-card">
+      <div class="title-text">Activity Log</div>
+      <div class="info-list" id="log-list"></div>
+      <div class="controls">
+        <button class="secondary" id="log-close">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="info-modal" id="round-modal">
+    <div class="info-card">
+      <div class="round-badge" id="round-badge">Round 1</div>
+      <div class="title-text" id="round-player">Player</div>
+      <div class="tagline-text">Your turn</div>
+      <div class="controls">
+        <button class="secondary" id="round-close">Start</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const debugErrors = [];
+    window.addEventListener('error', (e) => {
+      const msg = e.message || 'Unknown error';
+      const line = e.lineno ? ` (line ${e.lineno})` : '';
+      debugErrors.push(msg + line);
+    const debugEl = null;
+      if (debugEl) debugEl.textContent = `JS error: ${debugErrors[debugErrors.length - 1]}`;
+    });
+    const items = [
+      ["Mghaqad is sorm", "chair"],
+      ["Ghajdut", "rumours"],
+      ["Ssorgi", "tpoggi"],
+      ["Zorba", "tired after some hard work"],
+      ["Kkurdat", "organise/co ordinate"],
+      ["Mizmum", "mzamm"],
+      ["Katasta/ pataflun", "hafna"],
+      ["Filjozza", "godchild"],
+      ["Fustanijja", "middle child"],
+      ["Bajla", "li ddawwar ir ready mix"],
+      ["Kartabun", "right angle"],
+      ["Xiber", "🤙 measure"],
+      ["Satal", "barmil"],
+      ["Kulpara", "hook with 3 rooks"],
+      ["Misrah", "triq ma tinfidx - sqaq"],
+      ["Ghata", "kutra"],
+      ["Gverta", "kutra / deck tal vapur"],
+      ["Herza", "ghatu tal bir"],
+      ["Mitjar", "airport"],
+      ["Xefaq", "horizon"],
+      ["Moxt", "petne"],
+      ["Welcome", "mhemmx imniex / ta xejn"],
+      ["Matnazza", "clumsy/messy/lazy"],
+      ["bżieżka", "lazy"],
+      ["Gisem tal lavur", "geb at tond"],
+      ["Issottomettejt", "submitted"],
+      ["Fuq ir rih", "extra"],
+      ["Tipprendieh", "to get put off"],
+      ["Imprendatur", "entrapreneur"],
+      ["Cessun / cestun", ""],
+      ["Irmazzata", "not feeling good / jammed"],
+      ["Paljazza", "sarvetta"],
+      ["Bugarrun", "skifuz"],
+      ["Btala", "vacay"],
+      ["Horza", "tal bir"],
+      ["Satar", "barmil"],
+      ["Irpuzat", ""],
+      ["Wita", "catt"],
+      ["Qomt b’aorma", "burdata hazina"],
+      ["Btala", "safra"],
+      ["Tizboq", "supercede"],
+      ["Nileg", "our of breath"],
+      ["Bizla", "udder"],
+      ["Trejjaqt", "taffejt il guh"],
+      ["Mitjar", "airport"],
+      ["Nixtar", "to analyze"],
+      ["Tegavola", "to prefer someone else"],
+      ["Tillapazza", "toqod bli ghandek/mess"],
+      ["Ta zaqqha fommha", ""],
+      ["Indaga", "investigate"],
+      ["Imbruljun", "Xihadd li jfotti u jigbed lejh"],
+      ["Moribond", "wasal flahhar (death)"],
+      ["Pixxikalda", "tghidha lil xihadd antipatku li jaqbad ma kulhadd"],
+      ["Xieref", "niexef u iebes - though"],
+      ["Imbaskat", "crunchy"],
+      ["Stanjata", "kitla mimlijja"],
+      ["Imkrepattiva", "xihaga iddejqek"],
+      ["Jizzikaa", "jimbex"],
+      ["Far", "rat"],
+      ["Nfafet", "ponot wara li gidmek xihaga/ blisters"],
+      ["Mitrah", "saqqu"],
+      ["Masgar", "hafna sigar"],
+      ["Mafkar", "minument jfakkar lil xihadd"],
+      ["Mahzen", "garage kbir ghas storage"],
+      ["Ruff", "mezzanine"],
+      ["Ikkuttunati", "quilted"],
+      ["Jirpilja", "jiehu ir ruh"],
+      ["Wikkiel", "xihad jhobb jiekol"],
+      ["Avveniment", "event"],
+      ["Pitma", "qanshu"],
+      ["Fonqla", "qansha"],
+      ["Tisqieh", "to give liquid"],
+      ["Sylfie", "brother in law"],
+      ["Hatni", "ragel tohti"],
+      ["Hajm", "fsied"],
+      ["Iccanfar", "scolded"],
+      ["Skulajna", "sar il hin biex nitilqu"],
+      ["Remisonji", "hafna affarijiet"],
+      ["Manku", "handle"],
+      ["Mazuni", "unreligious"],
+      ["Tithajjem", "titfissed"],
+      ["Skarnata", "very hot"],
+      ["Tolza", "to slightly lift (elevate)"],
+      ["Tingazza", "thoss il bard"],
+      ["Mbaskat", "mahruq"],
+      ["Qaws", "bow and arrow"],
+      ["Tellerita", "chatterbox"],
+      ["Pustumetta", "ulcer"],
+      ["Jlieb", "drooling"],
+      ["Fulklu", "the heart or core"],
+      ["Inpassi", "timxi"],
+      ["Qlejba", "bicca tat tfal"],
+      ["Denju", "kif jisthoqlu"],
+      ["Sirda", "il kesha ta filghodu"],
+      ["Tifsa", "bassa minghajr hoss"],
+      ["Biqja", "bowl"],
+      ["Gabbaré", "tray"],
+      ["Rixtellu/ xatba", "gate"],
+      ["Bezzjoni", "bless you"],
+      ["Qallud", "big shit"],
+      ["Bieqja", "leftover food"],
+      ["Musbieħ", "lamp/light (before people said “dawl” more commonly)"],
+      ["Kejxa", "sloppy / rough / badly done"],
+      ["Tberbiq", "wastefulness / making a mess"],
+      ["Ferfira", "scattered everywhere"],
+      ["Qorq", "crumb"],
+    ];
+
+    let index = 0;
+    const wordEl = document.getElementById('word');
+    const meaningEl = document.getElementById('meaning');
+    const counterEl = document.getElementById('counter');
+    const barEl = document.getElementById('bar');
+    const slotWordEl = document.getElementById('slot-word');
+    const slotMeaningEl = document.getElementById('slot-meaning');
+    const slotStatusEl = document.getElementById('slot-status');
+    const slotGridEl = document.getElementById('slot-grid');
+    const slotCounterEl = document.getElementById('slot-counter');
+    const rouletteMeaningEl = document.getElementById('roulette-meaning');
+    const rouletteWordEl = document.getElementById('roulette-word');
+    const rouletteCounterEl = document.getElementById('roulette-counter');
+    const wheelTextEl = document.getElementById('wheel-text');
+    const modalEl = document.getElementById('answer-modal');
+    const introModal = document.getElementById('intro-modal');
+    const startGameBtn = document.getElementById('start-game-btn');
+    const headerTitle = document.querySelector('header h1');
+    const headerTagline = document.querySelector('header p');
+    const infoModal = document.getElementById('info-modal');
+    const infoTitle = document.getElementById('info-title');
+    const infoGraphic = document.getElementById('info-graphic');
+    const infoList = document.getElementById('info-list');
+    const infoClose = document.getElementById('info-close');
+    const rulesListEl = document.getElementById('rules-list');
+    const guardModal = document.getElementById('guard-modal');
+    const guardClose = document.getElementById('guard-close');
+    const guardMessage = document.getElementById('guard-message');
+    const logModal = document.getElementById('log-modal');
+    const logList = document.getElementById('log-list');
+    const logOpen = document.getElementById('log-open');
+    const logClose = document.getElementById('log-close');
+    const roundModal = document.getElementById('round-modal');
+    const roundBadge = document.getElementById('round-badge');
+    const roundPlayer = document.getElementById('round-player');
+    const roundClose = document.getElementById('round-close');
+    const turnLabelQuiz = document.getElementById('turn-label-quiz');
+    const turnLabelSlot = document.getElementById('turn-label-slot');
+    const turnLabelRoulette = document.getElementById('turn-label-roulette');
+    const modalWordEl = document.getElementById('modal-word');
+    const modalMeaningEl = document.getElementById('modal-meaning');
+    const modalCloseEl = document.getElementById('modal-close');
+    const modalScoreEl = document.getElementById('modal-score');
+    const modalRevealWrap = document.getElementById('modal-reveal-wrap');
+    const modalRevealBtn = document.getElementById('modal-reveal');
+    const introLimitInput = document.getElementById('intro-limit');
+    const introLimitMax = document.getElementById('intro-limit-max');
+    const introModeInputs = document.querySelectorAll('input[name="intro-mode"]');
+    let modalLocked = false;
+    let modalPendingMeaning = '';
+    const steps = [
+      document.getElementById('step-1'),
+      document.getElementById('step-2'),
+      document.getElementById('step-3'),
+      document.getElementById('step-4'),
+      document.getElementById('step-5'),
+    ];
+    const leaderboardCard = document.getElementById('leaderboard-card');
+    const leaderboardRail = document.getElementById('leaderboard-rail');
+    const activityLog = [];
+    function addLog(entry) {
+      activityLog.unshift(entry);
+      if (logList) {
+        logList.innerHTML = activityLog.map(e => `• ${e}`).join('<br>');
+      }
+    }
+
+    let raffleOrder = [];
+    let roundNumber = 1;
+    let turnIndex = 0;
+    let turnActive = false;
+
+    function showRoundModal() {
+      if (playMode === 'single') {
+        setTurnActive(true);
+        return;
+      }
+      if (!roundModal) return;
+      const player = raffleOrder[turnIndex];
+      if (!player) return;
+      roundBadge.textContent = `Round ${roundNumber}`;
+      roundPlayer.textContent = player.name;
+      if (turnLabelQuiz) turnLabelQuiz.textContent = `Turn: ${player.name}`;
+      if (turnLabelSlot) turnLabelSlot.textContent = `Turn: ${player.name}`;
+      if (turnLabelRoulette) turnLabelRoulette.textContent = `Turn: ${player.name}`;
+      setTurnActive(false);
+      roundModal.classList.add('show');
+    }
+
+    function setTurnActive(active) {
+      turnActive = active;
+      const ids = [
+        'next','shuffle',
+        'slot-spin','slot-stop',
+        'roulette-spin','roulette-stop'
+      ];
+      ids.forEach(id => {
+        const btn = document.getElementById(id);
+        if (btn) btn.disabled = !active;
+      });
+    }
+
+    function showStep(n) {
+      if (n === 2 && playMode === 'single') {
+        showStep(3);
+        return;
+      }
+      steps.forEach((el, i) => {
+        if (!el) return;
+        el.style.display = i === n ? '' : 'none';
+      });
+      if (leaderboardCard && leaderboardRail && n === 4) {
+        leaderboardRail.appendChild(leaderboardCard);
+      }
+      if (n === 4) {
+        document.body.classList.add('in-play');
+      } else {
+        document.body.classList.remove('in-play');
+      }
+    }
+    window.showStep = showStep;
+    let gameLimit = items.length;
+    let playMode = 'versus';
+    let available = [];
+    let hardIndices = [];
+    let roulettePool = [];
+    let used = new Set();
+
+    function setupPools(limit) {
+      const max = items.length;
+      gameLimit = Math.max(1, Math.min(limit || max, max));
+      available = Array.from({ length: gameLimit }, (_, i) => i);
+      used = new Set();
+      hardIndices = items
+        .map((pair, i) => ({ i, word: pair[0], meaning: pair[1] || '' }))
+        .filter(x =>
+          x.i < gameLimit &&
+          (x.word.length >= 9 || x.meaning.length >= 22 || x.word.includes(' ') || x.word.includes('/'))
+        )
+        .map(x => x.i);
+      roulettePool = hardIndices.length ? hardIndices : available.slice();
+    }
+
+    function updateCounters() {
+      const usedCount = used.size;
+      if (slotCounterEl) slotCounterEl.textContent = `${usedCount} / ${gameLimit}`;
+      if (rouletteCounterEl) rouletteCounterEl.textContent = `${usedCount} / ${gameLimit}`;
+      if (counterEl) {
+        counterEl.textContent = `${index + 1} / ${gameLimit}`;
+        barEl.style.width = `${((index + 1) / gameLimit) * 100}%`;
+      }
+    }
+
+    function render() {
+      const [word, meaning] = items[index];
+      wordEl.textContent = word;
+      meaningEl.textContent = meaning || "(no answer provided)";
+      meaningEl.classList.remove('revealed');
+      updateCounters();
+    }
+
+    function updateRules() {
+      if (!rulesListEl) return;
+      if (playMode === 'single') {
+        rulesListEl.innerHTML = `
+          <b>Goal:</b> Guess the meaning of the Maltese word or saying.<br>
+          <b>Solo Mode:</b> You play every round — no raffle or turn queue.<br>
+          <b>Quiz Mode:</b> Tap the word, then <span class="btn-pill">Reveal Answer</span> in the popup.<br>
+          <b>Slot & Roulette:</b> Tap <span class="btn-pill">Spin</span>, say STOP to lock the word.<br>
+          <b>Points:</b> IVA = 1 point, LE = 0 points. Updates immediately.<br>
+          <b>No repeats:</b> Once a word appears, it won’t show again.
+        `;
+      } else {
+        rulesListEl.innerHTML = `
+          <b>Goal:</b> Guess the meaning of the Maltese word or saying.<br>
+          <b>Turn‑Based:</b> Each round is for <b>one player only</b>. Then the next player goes, in order.<br>
+          <b>Rounds:</b> A new round starts after <b>everyone</b> has had one turn.<br>
+          <b>Quiz Mode:</b> Tap the word, then <span class="btn-pill">Reveal Answer</span> in the popup.<br>
+          <b>Slot & Roulette:</b> Tap <span class="btn-pill">Spin</span>, say STOP to lock the word.<br>
+          <b>Points:</b> IVA = 1 point, LE = 0 points. Updates immediately.<br>
+          <b>No repeats:</b> Once a word appears, it won’t show again.
+        `;
+      }
+    }
+
+    function showModal(word, meaning, withScore) {
+      modalWordEl.textContent = word;
+      modalLocked = !!withScore;
+      if (modalCloseEl) modalCloseEl.style.display = 'none';
+      modalPendingMeaning = meaning || '(no answer provided)';
+      modalMeaningEl.textContent = '';
+      modalMeaningEl.style.display = 'none';
+      if (modalRevealWrap) modalRevealWrap.style.display = withScore ? '' : 'none';
+      if (!withScore) {
+        modalMeaningEl.textContent = meaning || '';
+        modalMeaningEl.style.display = meaning ? '' : 'none';
+      }
+      if (modalScoreEl) {
+        if (withScore) {
+          const current = raffleOrder[turnIndex];
+          if (current) {
+            modalScoreEl.innerHTML = `
+              <div class="tagline-text" style="font-size:18px;margin:6px 0;">Min wieġeb tajjeb?</div>
+              <div class="leaderboard-row" style="justify-content:center;gap:14px;">
+                <div style="font-weight:800;">${current.name}</div>
+                <div class="score-actions">
+                  <button class="score-btn yes" data-score="${current.name}" data-val="yes">IVA</button>
+                  <button class="score-btn no" data-score="${current.name}" data-val="no">LE</button>
+                </div>
+              </div>`;
+          } else {
+            modalScoreEl.innerHTML = '';
+          }
+          modalScoreEl.style.display = 'none';
+          setTurnActive(false);
+        } else {
+          modalScoreEl.innerHTML = '';
+          modalScoreEl.style.display = 'none';
+        }
+      }
+      modalEl.classList.add('show');
+    }
+    function hideModal() {
+      modalLocked = false;
+      modalEl.classList.remove('show');
+    }
+    modalCloseEl.addEventListener('click', hideModal);
+    modalEl.addEventListener('click', (e) => {
+      if (e.target === modalEl && !modalLocked) hideModal();
+    });
+    if (roundClose) {
+      roundClose.addEventListener('click', () => {
+        roundModal.classList.remove('show');
+        setTurnActive(true);
+      });
+    }
+    if (logOpen) {
+      logOpen.addEventListener('click', () => {
+        if (logList) {
+          logList.innerHTML = activityLog.length ? activityLog.map(e => `• ${e}`).join('<br>') : 'No activity yet.';
+        }
+        logModal.classList.add('show');
+      });
+    }
+    if (logClose) {
+      logClose.addEventListener('click', () => logModal.classList.remove('show'));
+    }
+    document.body.classList.add('intro-active');
+    if (startGameBtn) {
+      startGameBtn.addEventListener('click', () => {
+        introModeInputs.forEach((r) => {
+          if (r.checked) playMode = r.value;
+        });
+        const limitVal = introLimitInput ? parseInt(introLimitInput.value, 10) : items.length;
+        setupPools(limitVal);
+        updateRules();
+        updateNextEnabled();
+        introModal.classList.add('hide');
+        // sprinkle a little dust
+        for (let i = 0; i < 24; i++) {
+          const d = document.createElement('div');
+          d.className = 'glitter';
+          d.textContent = '·';
+          d.style.left = (40 + Math.random() * 20) + 'vw';
+          d.style.top = (40 + Math.random() * 20) + 'vh';
+          d.style.fontSize = (10 + Math.random() * 10) + 'px';
+          d.style.opacity = 0.6;
+          d.style.animationDuration = (1 + Math.random()) + 's';
+          document.body.appendChild(d);
+          setTimeout(() => d.remove(), 1200);
+        }
+        setTimeout(() => {
+          introModal.classList.remove('show');
+          introModal.classList.remove('hide');
+          document.body.classList.remove('intro-active');
+          if (headerTitle) headerTitle.classList.add('zoom-in');
+          if (headerTagline) headerTagline.classList.add('zoom-in');
+        }, 520);
+      });
+    }
+
+    // intro is full-screen now; no size sync needed
+
+    // Simple sound effects
+    let audioCtx;
+    function beep(freq, dur) {
+      try {
+        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        const o = audioCtx.createOscillator();
+        const g = audioCtx.createGain();
+        o.frequency.value = freq;
+        o.type = 'sine';
+        g.gain.value = 0.05;
+        o.connect(g);
+        g.connect(audioCtx.destination);
+        o.start();
+        setTimeout(() => o.stop(), dur);
+      } catch {}
+    }
+
+
+    if (modalRevealBtn) {
+      modalRevealBtn.addEventListener('click', () => {
+        modalMeaningEl.textContent = modalPendingMeaning;
+        modalMeaningEl.style.display = '';
+        if (modalScoreEl) modalScoreEl.style.display = '';
+        if (modalRevealWrap) modalRevealWrap.style.display = 'none';
+      });
+    }
+
+    document.getElementById('next').addEventListener('click', () => {
+      index = (index + 1) % gameLimit;
+      render();
+    });
+
+    document.getElementById('shuffle').addEventListener('click', () => {
+      for (let i = gameLimit - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [items[i], items[j]] = [items[j], items[i]];
+      }
+      index = 0;
+      render();
+    });
+
+    if (wordEl) {
+      wordEl.addEventListener('click', () => {
+        if (!turnActive) return;
+        showModal(wordEl.textContent, meaningEl.textContent, true);
+      });
+    }
+
+
+    if (introLimitMax) introLimitMax.textContent = items.length;
+    if (introLimitInput) introLimitInput.setAttribute('max', String(items.length));
+    setupPools(items.length);
+    render();
+    updateCounters();
+
+    // Modes
+    const quizCard = document.getElementById('quiz-card');
+    const slotCard = document.getElementById('slot-card');
+    const rouletteCard = document.getElementById('roulette-card');
+    const modeQuiz = document.getElementById('mode-quiz');
+    const modeSlot = document.getElementById('mode-slot');
+    const modeRoulette = document.getElementById('mode-roulette');
+    const gameStatusEl = document.getElementById('game-status');
+
+    function setMode(mode) {
+      quizCard.style.display = mode === 'quiz' ? '' : 'none';
+      slotCard.style.display = mode === 'slot' ? '' : 'none';
+      rouletteCard.style.display = mode === 'roulette' ? '' : 'none';
+      modeQuiz.classList.toggle('active', mode === 'quiz');
+      modeSlot.classList.toggle('active', mode === 'slot');
+      modeRoulette.classList.toggle('active', mode === 'roulette');
+    }
+    window.setMode = setMode;
+
+    document.querySelectorAll('.mode-card').forEach((card) => {
+      card.addEventListener('click', () => {
+        const mode = card.getAttribute('data-mode');
+        document.querySelectorAll('.mode-card').forEach(c => c.classList.remove('selected'));
+        card.classList.add('selected');
+        setMode(mode);
+        showStep(2);
+      });
+    });
+
+    const svgQuiz = `
+      <svg viewBox="0 0 300 180" xmlns="http://www.w3.org/2000/svg">
+        <rect x="10" y="10" width="280" height="160" rx="18" fill="#fff6fb" stroke="#ffd0e8" stroke-width="2"/>
+        <rect x="30" y="28" width="240" height="40" rx="14" fill="#fff4fa" stroke="#ffd6e8"/>
+        <rect x="42" y="36" width="216" height="24" rx="10" fill="#ffd6e8"/>
+        <rect x="60" y="86" width="80" height="16" rx="8" fill="#ffd6e8"/>
+        <rect x="160" y="126" width="90" height="28" rx="14" fill="#ff6fb1"/>
+        <rect x="170" y="132" width="70" height="16" rx="8" fill="#fff"/>
+      </svg>`;
+    const svgReveal = `
+      <svg viewBox="0 0 300 180" xmlns="http://www.w3.org/2000/svg">
+        <rect x="18" y="18" width="264" height="144" rx="18" fill="#fff" stroke="#ffd0e8" stroke-width="2"/>
+        <rect x="36" y="40" width="228" height="20" rx="10" fill="#ffd6e8"/>
+        <rect x="36" y="70" width="200" height="20" rx="10" fill="#ffd6e8"/>
+        <rect x="36" y="100" width="150" height="20" rx="10" fill="#ffd6e8"/>
+        <rect x="200" y="124" width="70" height="24" rx="12" fill="#ff6fb1"/>
+      </svg>`;
+    const svgGuess = `
+      <svg viewBox="0 0 300 180" xmlns="http://www.w3.org/2000/svg">
+        <rect x="20" y="30" width="260" height="104" rx="18" fill="#fff" stroke="#ff9cc2" stroke-width="2"/>
+        <path d="M120 134 L150 134 L135 158 Z" fill="#fff" stroke="#ff9cc2" stroke-width="2"/>
+        <rect x="42" y="54" width="210" height="20" rx="8" fill="#ffd6e8"/>
+        <rect x="42" y="82" width="170" height="20" rx="8" fill="#ffd6e8"/>
+      </svg>`;
+    const svgScore = `
+      <svg viewBox="0 0 300 180" xmlns="http://www.w3.org/2000/svg">
+        <rect x="18" y="28" width="264" height="124" rx="18" fill="#fff6fb" stroke="#ffd0e8" stroke-width="2"/>
+        <rect x="36" y="50" width="140" height="18" rx="8" fill="#ffd6e8"/>
+        <rect x="200" y="46" width="64" height="26" rx="12" fill="#ff6fb1"/>
+        <rect x="36" y="84" width="140" height="18" rx="8" fill="#ffd6e8"/>
+        <rect x="200" y="80" width="64" height="26" rx="12" fill="#ff6fb1"/>
+      </svg>`;
+    const svgSlot = `
+      <svg viewBox="0 0 300 180" xmlns="http://www.w3.org/2000/svg">
+        <rect x="22" y="16" width="256" height="148" rx="18" fill="#fff6fb" stroke="#ffd0e8" stroke-width="2"/>
+        ${[0,1,2].map(r => [0,1,2].map(c => {
+          const x = 56 + c*64, y = 36 + r*44;
+          const fill = (r===1 && c===1) ? '#ff6fb1' : '#ffd6e8';
+          return `<rect x="${x}" y="${y}" width="50" height="34" rx="8" fill="${fill}"/>`;
+        }).join('')).join('')}
+        <rect x="190" y="124" width="74" height="28" rx="14" fill="#ff6fb1"/>
+      </svg>`;
+    const svgRoulette = `
+      <svg viewBox="0 0 300 180" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="150" cy="88" r="66" fill="#ffe0ef" stroke="#ff9cc2" stroke-width="10"/>
+        <circle cx="150" cy="88" r="54" fill="#fff"/>
+        <path d="M150 18 L166 48 L134 48 Z" fill="#ff6fb1"/>
+        <circle cx="150" cy="88" r="6" fill="#ff6fb1"/>
+        <rect x="200" y="126" width="70" height="26" rx="12" fill="#ff6fb1"/>
+      </svg>`;
+    const svgStop = `
+      <svg viewBox="0 0 300 180" xmlns="http://www.w3.org/2000/svg">
+        <rect x="110" y="40" width="80" height="80" rx="12" fill="#ff6fb1"/>
+        <rect x="95" y="30" width="110" height="16" rx="8" fill="#ffd6e8"/>
+        <rect x="95" y="126" width="110" height="16" rx="8" fill="#ffd6e8"/>
+      </svg>`;
+
+    function getInfoSteps(mode) {
+      const solo = playMode === 'single';
+      const step1 = solo
+        ? 'Solo mode — you play every round.'
+        : 'It’s <b>one player per round</b>, in order.';
+      const step5 = solo
+        ? 'Tap <span class="btn-pill">Reveal Answer</span>, then mark IVA/LE for your score.'
+        : 'Tap <span class="btn-pill">Reveal Answer</span>. IVA = 1, LE = 0. Updates instantly.';
+      const base = {
+        quiz: [
+          { text: step1, graphic: svgScore },
+          { text: 'Show the Maltese word only.', graphic: svgReveal },
+          { text: 'Player guesses out loud.', graphic: svgGuess },
+          { text: 'Tap <span class="btn-pill">Reveal Answer</span> to show meaning.', graphic: svgReveal },
+          { text: solo ? 'Mark IVA/LE to score, then continue.' : 'IVA = 1 point, LE = 0. Leaderboard updates, then next player.', graphic: svgScore },
+        ],
+        slot: [
+          { text: step1, graphic: svgScore },
+          { text: 'Tap <span class="btn-pill">Spin</span>, then say STOP to lock a word.', graphic: svgStop },
+          { text: 'Word stays on screen (no meaning).', graphic: svgSlot },
+          { text: 'Player guesses out loud.', graphic: svgGuess },
+          { text: step5, graphic: svgScore },
+        ],
+        roulette: [
+          { text: step1, graphic: svgScore },
+          { text: 'Tap <span class="btn-pill">Spin</span>, then say STOP to lock a word.', graphic: svgStop },
+          { text: 'Word stays on screen (no meaning).', graphic: svgRoulette },
+          { text: 'Player guesses out loud.', graphic: svgGuess },
+          { text: step5, graphic: svgScore },
+        ],
+      };
+      return base[mode];
+    }
+
+    function cloneGameCard(mode) {
+      const map = { quiz: 'quiz-card', slot: 'slot-card', roulette: 'roulette-card' };
+      const src = document.getElementById(map[mode]);
+      if (!src) return null;
+      const clone = src.cloneNode(true);
+      clone.classList.add('info-clone');
+      clone.removeAttribute('id');
+      clone.removeAttribute('style');
+      clone.style.display = 'block';
+      clone.querySelectorAll('[id]').forEach(el => el.removeAttribute('id'));
+      clone.querySelectorAll('button').forEach(btn => btn.remove());
+      clone.querySelectorAll('.controls').forEach(c => c.remove());
+      clone.querySelectorAll('.meta').forEach(m => m.remove());
+      return clone;
+    }
+
+    function renderInfo(mode) {
+      const steps = getInfoSteps(mode);
+      infoTitle.textContent = `${mode.toUpperCase()} MODE`;
+      infoGraphic.innerHTML = '';
+      const clone = cloneGameCard(mode);
+      if (clone) {
+        infoGraphic.appendChild(clone);
+      } else {
+        infoGraphic.innerHTML = steps[0].graphic;
+      }
+      infoList.innerHTML = steps.map((s, i) => `${i + 1}. ${s.text}`).join('<br>');
+    }
+
+    function openInfo(mode) {
+      renderInfo(mode);
+      infoModal.classList.add('show');
+    }
+    function closeInfo() {
+      infoModal.classList.remove('show');
+    }
+
+    document.querySelectorAll('.info-icon').forEach((icon) => {
+      icon.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const card = e.target.closest('.mode-card');
+        if (!card) return;
+        openInfo(card.getAttribute('data-mode'));
+      });
+    });
+    infoClose.addEventListener('click', () => closeInfo());
+
+    if (modeQuiz) modeQuiz.addEventListener('click', () => setMode('quiz'));
+    if (modeSlot) modeSlot.addEventListener('click', () => setMode('slot'));
+    if (modeRoulette) modeRoulette.addEventListener('click', () => setMode('roulette'));
+
+    const fxLayer = document.getElementById('fx-layer');
+
+    function spawnFlower() {
+      const flower = document.createElement('div');
+      flower.className = 'flower';
+      flower.textContent = '✿';
+      const size = 18 + Math.random() * 22;
+      const left = Math.random() * 100;
+      const duration = 8 + Math.random() * 8;
+      const delay = Math.random() * 2;
+      flower.style.left = left + 'vw';
+      flower.style.fontSize = size + 'px';
+      flower.style.animationDuration = duration + 's';
+      flower.style.animationDelay = delay + 's';
+      fxLayer.appendChild(flower);
+      setTimeout(() => flower.remove(), (duration + delay) * 1000);
+    }
+
+    setInterval(spawnFlower, 220);
+    for (let i = 0; i < 18; i++) spawnFlower();
+
+    function spawnWordBox() {
+      const idx = Math.floor(Math.random() * items.length);
+      const [word] = items[idx];
+      const box = document.createElement('div');
+      box.className = 'flower';
+      box.textContent = word;
+      box.style.background = 'rgba(255,246,251,0.9)';
+      box.style.border = '1px solid #ffd0e8';
+      box.style.borderRadius = '12px';
+      box.style.padding = '4px 8px';
+      box.style.color = '#8e1f5a';
+      box.style.fontSize = (12 + Math.random() * 8) + 'px';
+      box.style.boxShadow = '0 6px 14px rgba(176,42,111,0.18)';
+      box.style.left = (Math.random() * 90) + 'vw';
+      box.style.animationDuration = (9 + Math.random() * 8) + 's';
+      fxLayer.appendChild(box);
+      setTimeout(() => box.remove(), 18000);
+    }
+    setInterval(spawnWordBox, 500);
+
+    // Glitter
+    function spawnGlitter() {
+      const g = document.createElement('div');
+      g.className = 'glitter';
+      g.textContent = '✦';
+      const size = 10 + Math.random() * 12;
+      const left = Math.random() * 100;
+      const duration = 6 + Math.random() * 6;
+      g.style.left = left + 'vw';
+      g.style.fontSize = size + 'px';
+      g.style.animationDuration = duration + 's';
+      fxLayer.appendChild(g);
+      setTimeout(() => g.remove(), duration * 1000);
+    }
+    setInterval(spawnGlitter, 180);
+
+    function spawnHeart() {
+      const h = document.createElement('div');
+      h.className = 'heart';
+      h.textContent = '♥';
+      const size = 10 + Math.random() * 10;
+      const left = Math.random() * 100;
+      const duration = 7 + Math.random() * 7;
+      h.style.left = left + 'vw';
+      h.style.fontSize = size + 'px';
+      h.style.animationDuration = duration + 's';
+      fxLayer.appendChild(h);
+      setTimeout(() => h.remove(), duration * 1000);
+    }
+    setInterval(spawnHeart, 220);
+
+    function burstEffects() {
+      for (let i = 0; i < 28; i++) {
+        const b = document.createElement('div');
+        b.className = 'burst';
+        b.style.left = (20 + Math.random() * 60) + 'vw';
+        b.style.top = (20 + Math.random() * 40) + 'vh';
+        const dx = (Math.random() * 360 - 180) + 'px';
+        const dy = (Math.random() * 220 - 110) + 'px';
+        b.style.setProperty('--dx', dx);
+        b.style.setProperty('--dy', dy);
+        b.style.background = Math.random() > 0.5 ? '#ff7aa2' : '#ffd166';
+        document.body.appendChild(b);
+        setTimeout(() => b.remove(), 1000);
+      }
+    }
+
+    function pickAvailable(preferredIndex) {
+      if (available.length === 0) return -1;
+      if (available.includes(preferredIndex)) return preferredIndex;
+      return available[Math.floor(Math.random() * available.length)];
+    }
+    function pickFromPool(pool, preferredIndex) {
+      if (!pool || pool.length === 0) return pickAvailable(preferredIndex);
+      const opts = pool.filter(i => available.includes(i));
+      if (opts.length === 0) return -1;
+      if (preferredIndex !== undefined && opts.includes(preferredIndex)) return preferredIndex;
+      return opts[Math.floor(Math.random() * opts.length)];
+    }
+
+    function markUsed(idx) {
+      used.add(idx);
+      const pos = available.indexOf(idx);
+      if (pos !== -1) available.splice(pos, 1);
+      updateCounters();
+    }
+
+    // Slot mode
+    let slotTimer = null;
+    let slotIndex = 0;
+    let slotPicked = null;
+    let slotDelay = 55;
+    let slotStopping = false;
+    function updateSlotGrid() {
+      if (!slotGridEl) return;
+      const cells = Array.from(slotGridEl.querySelectorAll('.slot-cell'));
+      const base = slotIndex;
+      cells.forEach((cell, i) => {
+        const idx = (base + i * 3) % gameLimit;
+        cell.textContent = items[idx][0];
+        cell.classList.toggle('center', i === 4);
+      });
+    }
+    updateSlotGrid();
+    function slotStep() {
+      slotIndex = (slotIndex + 1) % gameLimit;
+      slotWordEl.textContent = items[slotIndex][0];
+      updateSlotGrid();
+      if (slotStatusEl) slotStatusEl.textContent = 'Spinning...';
+    }
+    function slotLoop() {
+      if (!slotTimer) return;
+      slotStep();
+      slotTimer = setTimeout(slotLoop, slotDelay);
+    }
+    function slotStop() {
+      if (!slotTimer || slotStopping) return;
+      slotStopping = true;
+      // slow down before stopping
+      let steps = 10;
+      const slow = () => {
+        if (!slotTimer) return;
+        slotStep();
+        slotDelay += 18;
+        steps -= 1;
+        if (steps <= 0) {
+          clearTimeout(slotTimer);
+          slotTimer = null;
+          slotStopping = false;
+          slotDelay = 55;
+          finalizeSlotStop();
+        } else {
+          slotTimer = setTimeout(slow, slotDelay);
+        }
+      };
+      slow();
+    }
+    function finalizeSlotStop() {
+      const idx = pickAvailable(slotIndex);
+      if (idx === -1) {
+        slotWordEl.textContent = 'All done!';
+        slotMeaningEl.textContent = 'No more words left.';
+        slotMeaningEl.classList.add('revealed');
+        return;
+      }
+      slotPicked = idx;
+      const [word, meaning] = items[idx];
+      slotWordEl.textContent = word;
+      // jackpot: all reels show the same word
+      if (slotGridEl) {
+        slotGridEl.querySelectorAll('.slot-cell').forEach(cell => {
+          cell.textContent = word;
+        });
+      }
+      slotMeaningEl.classList.remove('revealed');
+      if (slotStatusEl) slotStatusEl.textContent = 'Stopped.';
+      // do not overwrite jackpot grid with cycling content
+      if (slotStatusEl) slotStatusEl.textContent = 'Stopped.';
+      markUsed(idx);
+      burstEffects();
+      showModal(word, meaning, true);
+    }
+    document.getElementById('slot-spin').addEventListener('click', () => {
+      if (!turnActive) return;
+      slotMeaningEl.classList.remove('revealed');
+      if (slotTimer) return;
+      slotPicked = null;
+      if (slotStatusEl) slotStatusEl.textContent = 'Spinning...';
+      slotDelay = 55;
+      slotStopping = false;
+      slotIndex = slotIndex % gameLimit;
+      slotTimer = setTimeout(slotLoop, slotDelay);
+    });
+    document.getElementById('slot-stop').addEventListener('click', () => {
+      if (!turnActive) return;
+      slotStop();
+    });
+    // slot reveal button removed
+
+    // Roulette mode
+    let rouletteTimer = null;
+    let rouletteIndex = 0;
+    let roulettePoolIndex = 0;
+    let roulettePicked = null;
+    let angle = 0;
+    function rouletteStep() {
+      roulettePoolIndex = (roulettePoolIndex + 1) % roulettePool.length;
+      rouletteIndex = roulettePool[roulettePoolIndex];
+      angle = (angle + 12) % 360;
+      const w = items[rouletteIndex][0];
+      wheelTextEl.textContent = w;
+      if (rouletteWordEl) rouletteWordEl.textContent = w;
+      document.getElementById('wheel').style.transform = `rotate(${angle}deg)`;
+    }
+    function rouletteStop() {
+      if (rouletteTimer) clearInterval(rouletteTimer);
+      rouletteTimer = null;
+      const idx = pickFromPool(roulettePool, rouletteIndex);
+      if (idx === -1) {
+        wheelTextEl.textContent = 'All done!';
+        rouletteMeaningEl.textContent = 'No more words left.';
+        rouletteMeaningEl.classList.add('revealed');
+        return;
+      }
+      roulettePicked = idx;
+      const [word, meaning] = items[idx];
+      wheelTextEl.textContent = word;
+      if (rouletteWordEl) rouletteWordEl.textContent = word;
+      rouletteMeaningEl.classList.remove('revealed');
+      markUsed(idx);
+      burstEffects();
+      showModal(word, meaning, true);
+    }
+    document.getElementById('roulette-spin').addEventListener('click', () => {
+      if (!turnActive) return;
+      rouletteMeaningEl.classList.remove('revealed');
+      if (rouletteTimer) return;
+      roulettePicked = null;
+      roulettePoolIndex = Math.floor(Math.random() * roulettePool.length);
+      rouletteTimer = setInterval(rouletteStep, 80);
+    });
+    document.getElementById('roulette-stop').addEventListener('click', () => {
+      if (!turnActive) return;
+      rouletteStop();
+    });
+    // roulette reveal button removed
+
+    // Enter key stops current mode
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        if (slotTimer || rouletteTimer) {
+          e.preventDefault();
+          e.stopPropagation();
+        }
+        if (slotTimer) slotStop();
+        if (rouletteTimer) rouletteStop();
+      }
+    }, true);
+
+    // Leaderboard
+    const leaderboardEl = document.getElementById('leaderboard');
+    const playerInput = document.getElementById('player-name');
+    const playerForm = document.getElementById('player-form');
+    const debugLogEl = null;
+    const players = [];
+    let currentPlayerIndex = 0;
+    const raffleCurrent = document.getElementById('raffle-current');
+    const raffleStatus = document.getElementById('raffle-status');
+    const raffleList = document.getElementById('raffle-list');
+    const raffleStart = document.getElementById('raffle-start');
+    const toStep4Btn = document.getElementById('to-step-4');
+
+    function shufflePlayers() {
+      const arr = [...players];
+      for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+      }
+      return arr;
+    }
+
+    function runRaffle() {
+      if (players.length < 2) return;
+      if (raffleStatus) raffleStatus.textContent = 'Rolling...';
+      let i = 0;
+      const ticks = 18;
+      const interval = setInterval(() => {
+        const temp = shufflePlayers();
+        if (raffleCurrent) raffleCurrent.textContent = temp[i % temp.length].name;
+        i += 1;
+        if (i >= ticks) {
+          clearInterval(interval);
+          const finalOrder = shufflePlayers();
+          if (raffleList) {
+            raffleList.innerHTML = finalOrder.map((p, idx) =>
+              `<div class="raffle-item">
+                 <span class="raffle-rank">${idx + 1}</span>
+                 <span>${p.name}</span>
+                 <span></span>
+               </div>`
+            ).join('');
+          }
+          raffleOrder = finalOrder;
+          roundNumber = 1;
+          turnIndex = 0;
+          showRoundModal();
+          if (raffleStatus) raffleStatus.textContent = 'Order set.';
+          if (toStep4Btn) toStep4Btn.disabled = false;
+        }
+      }, 120);
+    }
+
+    function renderLeaderboard() {
+      if (players.length === 0) {
+        leaderboardEl.innerHTML = '';
+        return;
+      }
+      const sorted = [...players].sort((a, b) => b.score - a.score || a.name.localeCompare(b.name));
+      leaderboardEl.innerHTML = sorted.map((p, i) => {
+        return `<div class=\"leaderboard-row\">
+          <div data-player=\"${p.name}\">${p.name}</div>
+          <div>${p.score}</div>
+          <button class=\"remove-btn\" data-remove=\"${p.name}\">Remove</button>
+        </div>`;
+      }).join('');
+    }
+
+    const toStep2Btn = document.getElementById('to-step-2');
+    function updateNextEnabled() {
+      if (!toStep2Btn) return;
+      const minPlayers = playMode === 'single' ? 1 : 2;
+      const blocked = players.length < minPlayers;
+      toStep2Btn.classList.toggle('btn-blocked', blocked);
+      toStep2Btn.setAttribute('aria-disabled', blocked ? 'true' : 'false');
+    }
+
+    function addPlayer() {
+      const name = playerInput.value.trim();
+      if (!name) return;
+      const maxPlayers = playMode === 'single' ? 1 : 10;
+      if (players.length >= maxPlayers) {
+        if (gameStatusEl) {
+          gameStatusEl.textContent = playMode === 'single'
+            ? 'Single player mode: only 1 player allowed.'
+            : 'Max 10 players reached.';
+        }
+        return;
+      }
+      players.push({ name, score: 0 });
+      playerInput.value = '';
+      playerInput.focus();
+      renderLeaderboard();
+      if (gameStatusEl) gameStatusEl.textContent = '';
+      updateNextEnabled();
+      // debug removed
+    }
+    window.addPlayer = addPlayer;
+    document.getElementById('add-player').addEventListener('click', addPlayer);
+    if (playerForm) {
+      playerForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        addPlayer();
+      });
+    }
+    if (raffleStart) {
+      raffleStart.addEventListener('click', runRaffle);
+    }
+    leaderboardEl.addEventListener('click', (e) => {
+      const btn = e.target.closest('button[data-remove]');
+      if (!btn) return;
+      const name = btn.getAttribute('data-remove');
+      const idx = players.findIndex(p => p.name === name);
+      if (idx >= 0) {
+        players.splice(idx, 1);
+        renderLeaderboard();
+        updateNextEnabled();
+        // debug removed
+      }
+    });
+    if (toStep2Btn) {
+      toStep2Btn.addEventListener('click', () => {
+        const minPlayers = playMode === 'single' ? 1 : 2;
+        if (players.length < minPlayers) {
+          if (guardMessage) {
+            guardMessage.textContent = minPlayers === 1
+              ? 'Trid tagħżel mill-inqas 1 plejer.'
+              : 'Trid tagħżel mill-inqas 2 plejers.';
+          }
+          if (guardModal) guardModal.classList.add('show');
+          return;
+        }
+        showStep(1);
+      });
+    }
+    if (guardClose) {
+      guardClose.addEventListener('click', () => guardModal.classList.remove('show'));
+    }
+    if (modalScoreEl) {
+      modalScoreEl.addEventListener('click', (e) => {
+        const btn = e.target.closest('button[data-score]');
+        if (!btn) return;
+        const name = btn.getAttribute('data-score');
+        const val = btn.getAttribute('data-val');
+        const p = players.find(x => x.name === name);
+        if (!p) return;
+        if (val === 'yes') p.score += 1;
+        renderLeaderboard();
+        const word = modalWordEl ? modalWordEl.textContent : '';
+        const meaning = modalMeaningEl ? modalMeaningEl.textContent : '';
+        addLog(`${name}: ${val === 'yes' ? 'IVA' : 'LE'} — ${word} = ${meaning}`);
+        hideModal();
+        // advance turn after scoring
+        turnIndex += 1;
+        if (turnIndex >= raffleOrder.length) {
+          turnIndex = 0;
+          roundNumber += 1;
+        }
+        showRoundModal();
+      });
+    }
+    document.getElementById('back-to-1').addEventListener('click', () => showStep(0));
+    document.getElementById('to-step-3').addEventListener('click', () => {
+      if (playMode === 'single') {
+        raffleOrder = players.slice(0, 1);
+        roundNumber = 1;
+        turnIndex = 0;
+        setTurnActive(true);
+        showStep(3);
+      } else {
+        showStep(2);
+      }
+    });
+    document.getElementById('back-to-2b').addEventListener('click', () => showStep(1));
+    document.getElementById('back-to-3').addEventListener('click', () => showStep(2));
+    document.getElementById('to-step-4').addEventListener('click', () => showStep(3));
+    document.getElementById('to-step-5').addEventListener('click', () => showStep(4));
+
+    // Start Game removed; modes always available
+
+    // Score/next player controls removed per request
+
+    renderLeaderboard();
+    updateNextEnabled();
+    if (gameStatusEl) gameStatusEl.textContent = '';
+  </script>
+</body>
+</html>
