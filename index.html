@@ -794,6 +794,7 @@
       justify-content: center;
       z-index: 10;
       padding: 20px;
+      pointer-events: auto;
     }
     .modal.show {
       display: flex;
@@ -857,6 +858,7 @@
       position: fixed;
       inset: 0;
       z-index: 8;
+      pointer-events: auto;
     }
     .intro-active .wrap > :not(#intro-modal) {
       visibility: hidden;
@@ -890,6 +892,9 @@
       cursor: pointer;
       box-shadow: 0 6px 16px rgba(255,111,177,0.2);
     }
+    .icon-btn.fullscreen {
+      font-size: 18px;
+    }
     .intro-content {
       background: transparent;
       border: 0;
@@ -903,6 +908,7 @@
       gap: 16px;
       align-items: center;
       justify-content: center;
+      pointer-events: auto;
     }
     @keyframes pop {
       from { transform: scale(0.95); opacity: 0; }
@@ -942,6 +948,7 @@
 <body>
   <div class="wrap">
     <div class="top-right">
+      <button class="icon-btn fullscreen" id="fs-toggle" title="Fullscreen">⛶</button>
       <button class="icon-btn" id="log-open" title="Activity Log">📝</button>
     </div>
     <div class="modal show intro-modal" id="intro-modal">
@@ -950,7 +957,7 @@
           <div class="title-text">KWIZZ MALTI</div>
         <div class="tagline-text">Tgħidx li taf kollox — PROVE IT!</div>
           <div class="meta" style="font-size:18px;">
-            How many words this game?<br>
+            How many words would you like to get?<br>
             Max: <span id="intro-limit-max">0</span>
           </div>
           <input id="intro-limit" type="number" min="1" value="30" style="width:min(220px,80vw); text-align:center; background:#fff0f7; border:2px solid #ff9cc2; border-radius:18px; padding:12px 14px; font-size:20px; box-shadow:0 6px 16px rgba(255,111,177,0.2);" />
@@ -1034,7 +1041,7 @@
       <div class="card">
         <div class="badge">Raffle Order</div>
         <div class="word" id="raffle-current">Ready to pick the order</div>
-        <div class="meta" id="raffle-status">Press Raffle to randomize the player order.</div>
+        <div class="meta" id="raffle-status">This picks the player order (who goes first, second, third…).</div>
         <div class="controls">
           <button id="raffle-start">Raffle Order</button>
           <button class="secondary" id="back-to-2b">Back</button>
@@ -1346,6 +1353,7 @@
     const introLimitInput = document.getElementById('intro-limit');
     const introLimitMax = document.getElementById('intro-limit-max');
     const introModeInputs = document.querySelectorAll('input[name="intro-mode"]');
+    const fsToggle = document.getElementById('fs-toggle');
     let modalLocked = false;
     let modalPendingMeaning = '';
     const steps = [
@@ -1546,6 +1554,17 @@
       logClose.addEventListener('click', () => logModal.classList.remove('show'));
     }
     document.body.classList.add('intro-active');
+    if (fsToggle) {
+      fsToggle.addEventListener('click', async () => {
+        try {
+          if (!document.fullscreenElement) {
+            await document.documentElement.requestFullscreen();
+          } else {
+            await document.exitFullscreen();
+          }
+        } catch {}
+      });
+    }
     if (startGameBtn) {
       startGameBtn.addEventListener('click', () => {
         introModeInputs.forEach((r) => {
@@ -1635,6 +1654,9 @@
     setupPools(items.length);
     render();
     updateCounters();
+    try {
+      localStorage.setItem('kwizz_words', JSON.stringify(items));
+    } catch {}
 
     // Modes
     const quizCard = document.getElementById('quiz-card');
