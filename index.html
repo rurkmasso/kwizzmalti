@@ -971,6 +971,189 @@
       font-weight: 700;
       box-shadow: none;
     }
+
+    @media (max-width: 960px) {
+      .play-layout {
+        grid-template-columns: 1fr;
+      }
+      .left-rail {
+        order: 2;
+      }
+    }
+
+    @media (max-width: 768px) {
+      body {
+        padding: 12px;
+      }
+      .wrap {
+        width: 100%;
+        padding: 20px;
+        border-radius: 20px;
+        height: calc(100vh - 24px);
+        overflow: hidden;
+      }
+      .title-text {
+        font-size: 52px;
+      }
+      .tagline-text {
+        font-size: 22px;
+      }
+      .card {
+        padding: 24px;
+      }
+      header {
+        margin-bottom: 10px;
+      }
+      .step {
+        min-height: 0;
+      }
+      .main-block {
+        min-height: 0;
+      }
+      .mode-grid {
+        grid-template-columns: 1fr;
+        width: 100%;
+      }
+      .mode-card {
+        padding: 16px;
+      }
+      .word {
+        font-size: 44px;
+        padding: 8px 12px;
+      }
+      .meaning {
+        font-size: 22px;
+      }
+      .turn-banner {
+        font-size: 16px;
+        padding: 6px 14px;
+      }
+      .slot-grid {
+        grid-template-columns: repeat(3, minmax(80px, 1fr));
+        gap: 8px;
+        width: 100%;
+      }
+      .slot-cell {
+        font-size: 13px;
+        min-height: 50px;
+        padding: 10px 6px;
+      }
+      .wheel-wrap {
+        width: 240px;
+        height: 240px;
+      }
+      .wheel {
+        width: 240px;
+        height: 240px;
+      }
+      .controls {
+        gap: 8px;
+      }
+      button {
+        font-size: 14px;
+        padding: 10px 14px;
+      }
+      .score-btn {
+        font-size: 14px;
+        padding: 10px 14px;
+      }
+      .leaderboard-row {
+        grid-template-columns: 1.4fr 0.6fr 0.6fr;
+        font-size: 14px;
+      }
+      .answer-card {
+        width: calc(100% - 24px);
+        padding: 20px;
+      }
+      .modal-word {
+        font-size: 28px;
+      }
+      .modal-meaning {
+        font-size: 18px;
+      }
+      .limit-wrap {
+        width: 100%;
+        justify-content: center;
+        flex-wrap: wrap;
+      }
+      #intro-limit {
+        width: min(260px, 86vw);
+      }
+    }
+
+    @media (max-height: 700px) {
+      .title-text {
+        font-size: 40px;
+      }
+      .tagline-text {
+        font-size: 18px;
+      }
+      .card {
+        padding: 18px;
+      }
+      .word {
+        font-size: 32px;
+      }
+      .wheel-wrap,
+      .wheel {
+        width: 200px;
+        height: 200px;
+      }
+      .slot-grid {
+        grid-template-columns: repeat(3, minmax(64px, 1fr));
+      }
+      .slot-cell {
+        font-size: 12px;
+        min-height: 44px;
+      }
+      .controls {
+        gap: 6px;
+      }
+      button {
+        font-size: 13px;
+        padding: 8px 12px;
+      }
+      .score-btn {
+        font-size: 13px;
+        padding: 8px 12px;
+      }
+      .answer-card {
+        padding: 16px;
+      }
+      .modal-word {
+        font-size: 24px;
+      }
+      .modal-meaning {
+        font-size: 16px;
+      }
+      .intro-content {
+        gap: 10px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .title-text {
+        font-size: 40px;
+      }
+      .tagline-text {
+        font-size: 18px;
+      }
+      .word {
+        font-size: 34px;
+      }
+      .wheel-wrap,
+      .wheel {
+        width: 210px;
+        height: 210px;
+      }
+      .slot-grid {
+        grid-template-columns: repeat(3, minmax(70px, 1fr));
+      }
+      .leaderboard-row {
+        grid-template-columns: 1.2fr 0.6fr 0.6fr;
+        font-size: 13px;
+      }
+    }
   </style>
 </head>
 <body>
